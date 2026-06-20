@@ -31,7 +31,17 @@ const next = currentIdx < allChapters.length - 1 ? allChapters[currentIdx + 1] :
       <Content />
     </div>
 
-    <nav class="mt-12 pt-6 border-t flex justify-between" style="border-color: var(--border);">
+    <!-- Resources — after content, before nav -->
+    <div class="mt-10 pt-6 border-t" style="border-color: var(--border);">
+      <p class="text-sm font-semibold mb-3" style="color: var(--text);">Resources</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://github.com/tamtidmear-prog/vialumen/tree/master/%CF%88/writing/books/workshop-06-vialumen" target="_blank" rel="noopener" class="btn-outline text-xs">Markdown ต้นฉบับ (GitHub) ↗</a>
+        <a href="/books/workshop-06-vialumen.pdf" download class="btn-outline text-xs">ดาวน์โหลด PDF ↓</a>
+        <a href="/read/chain-story" class="btn-outline text-xs">ดูตัวอย่าง PDF</a>
+      </div>
+    </div>
+
+    <nav class="mt-8 pt-6 border-t flex justify-between" style="border-color: var(--border);">
       {prev ? (
         <a href={`/books/${prev.id}`} class="text-sm accent-text">← {prev.data.titleTH}</a>
       ) : <span />}
