@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const chapters = await getCollection('books');
+  return chapters.map((ch) => ({
+    params: { slug: ch.id },
+    props: { chapter: ch },
+  }));
+}
+
+const { chapter } = Astro.props;
+const { Content } = await render(chapter);
+const allChapters = (await getCollection('books')).sort((a, b) => a.data.chapter - b.data.chapter);
+const currentIdx = allChapters.findIndex((c) => c.id === chapter.id);
+const prev = currentIdx > 0 ? allChapters[currentIdx - 1] : null;
+const next = currentIdx < allChapters.length - 1 ? allChapters[currentIdx + 1] : null;
+---
+
+<Base title={`${chapter.data.titleTH} — ViaLumen`} description={chapter.data.title}>
+  <article class="max-w-3xl mx-auto px-6 py-20">
+    <header class="mb-10">
+      <a href="/books" class="text-sm accent-text mb-4 inline-block">← สารบัญ</a>
+      <span class="text-xs font-mono accent-text">บทที่ {chapter.data.chapter}</span>
+      <h1 class="text-3xl font-bold mt-1 mb-2" style="color: var(--text);">{chapter.data.titleTH}</h1>
+      <h2 class="text-lg" style="color: var(--text-secondary);">{chapter.data.title}</h2>
+    </header>
+
+    <div class="prose max-w-none" style="color: var(--text-secondary); line-height: 1.9; font-size: 1.05rem;">
+      <Content />
+    </div>
+
+    <nav class="mt-12 pt-6 border-t flex justify-between" style="border-color: var(--border);">
+      {prev ? (
+        <a href={`/books/${prev.id}`} class="text-sm accent-text">← {prev.data.titleTH}</a>
+      ) : <span />}
+      {next ? (
+        <a href={`/books/${next.id}`} class="text-sm accent-text">{next.data.titleTH} →</a>
+      ) : <span />}
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .prose h1, .prose h2, .prose h3 { color: var(--text); font-weight: 700; margin-top: 2rem; margin-bottom: 0.5rem; }
+  .prose h1 { font-size: 1.8rem; }
+  .prose h2 { font-size: 1.4rem; }
+  .prose h3 { font-size: 1.15rem; }
+  .prose p { margin-bottom: 1.2rem; }
+  .prose code { background: var(--surface-hover); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; }
+  .prose pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 1.5rem 0; }
+  .prose pre code { background: none; padding: 0; }
+  .prose blockquote { border-left: 3px solid var(--primary); padding-left: 1rem; margin: 1.5rem 0; font-style: italic; color: var(--text-dim); }
+  .prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 1.2rem; }
+  .prose li { margin-bottom: 0.3rem; }
+  .prose a { color: var(--primary); text-decoration: underline; }
+</style>

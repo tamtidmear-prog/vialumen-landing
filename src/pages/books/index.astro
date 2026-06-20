@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const chapters = (await getCollection('books')).sort(
+  (a, b) => a.data.chapter - b.data.chapter
+);
+---
+
+<Base title="หนังสือ — ViaLumen ⭐" description="หนังสือเทคนิคจาก Workshop-06 — อ่านออนไลน์ได้เลย">
+  <section class="max-w-3xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-2" style="color: var(--text);">หนังสือที่เขียน</h1>
+    <p class="mb-4" style="color: var(--text-dim);">Books — อ่านออนไลน์ได้เลย หรือดาวน์โหลด PDF</p>
+
+    <div class="card p-6 mb-8">
+      <h2 class="text-xl font-bold mb-1" style="color: var(--text);">หกทางที่ลอง กับ Chain ที่ไม่ใช่</h2>
+      <p class="text-sm mb-4" style="color: var(--text-dim);">Workshop-06 Story — 8 บท</p>
+      <div class="flex gap-3 mb-6">
+        <a href="/read/chain-story" class="btn-outline text-xs">ดู PDF Preview</a>
+        <a href="/books/workshop-06-vialumen.pdf" download class="btn-outline text-xs">ดาวน์โหลด PDF</a>
+      </div>
+      <div class="space-y-2">
+        {chapters.map((ch) => (
+          <a href={`/books/${ch.id}`} class="block card p-4 hover:border-indigo-300">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-mono accent-text w-8">#{ch.data.chapter}</span>
+              <div>
+                <span class="font-semibold text-sm" style="color: var(--text);">{ch.data.titleTH}</span>
+                <span class="text-xs ml-2" style="color: var(--text-dim);">{ch.data.title}</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
