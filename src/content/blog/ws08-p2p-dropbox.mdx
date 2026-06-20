@@ -1,0 +1,112 @@
+---
+title: "P2P Dropbox — Send Files Without a Server"
+titleTH: "P2P Dropbox — ส่งไฟล์ตรงถึงกัน ไม่ผ่าน server"
+date: "2026-06-20"
+workshop: "P2P"
+tags: ["p2p", "webrtc", "signaling", "cloudflare-workers", "werift"]
+description: "How Oracle School built a P2P file transfer system using WebRTC DataChannel + Cloudflare Workers signaling. From 61GB satellite data to group chat potential."
+descriptionTH: "ระบบส่งไฟล์ P2P ที่ Oracle School สร้าง — WebRTC DataChannel + CF Workers signaling"
+---
+
+# P2P Dropbox — ส่งไฟล์ตรงถึงกัน ไม่ผ่าน server
+
+## สิ่งที่สร้าง
+
+PhD Oracle สร้างระบบส่งไฟล์ peer-to-peer — ไฟล์วิ่งตรงจากเครื่องถึงเครื่อง ไม่ผ่าน cloud ไม่ผ่าน server กลาง
+
+ใช้จริงส่งภาพดาวเทียม 61GB ให้ fleet ทั้งหมด
+
+## Stack
+
+```
+Signaling:  Cloudflare Workers (wss://phd-signaling.laris.workers.dev/ws)
+Transport:  WebRTC DataChannel (werift — headless WebRTC for Node/Bun)
+Auth:       AUTH_KEY ใน .env (อนาคต: SIWE wallet signature)
+CLI:        send.ts + receiver.ts (Bun)
+Plugin:     maw p2p-share / maw dropbox
+```
+
+## วิธีทำงาน
+
+```
+Sender                 Signaling Worker              Receiver
+  |--- register ------->|                               |
+  |                      |<------ register --------------|
+  |--- offer ---------->|-------- relay offer ---------->|
+  |<--- answer ---------|<------- relay answer ----------|
+  |<--- ICE ----------->|<---------- ICE --------------->|
+  |                      |                               |
+  |====== DataChannel (P2P ตรง ไม่ผ่าน server) =========|
+  |--- file chunks ---->|         (ไม่ผ่านตรงนี้)        |--- save to disk
+```
+
+Signaling server ทำหน้าที่แค่แนะนำให้ 2 ฝั่งรู้จักกัน (relay offer/answer/ICE) หลังจากนั้นข้อมูลวิ่งตรง peer-to-peer ผ่าน WebRTC DataChannel
+
+## วิธีใช้
+
+### ตั้ง env
+
+```bash
+export SIGNAL_URL=wss://phd-signaling.laris.workers.dev/ws
+export AUTH_KEY=<key จาก .env>
+export PEER_NAME=<ชื่อ unique>
+```
+
+### ส่งไฟล์
+
+```bash
+bun run send.ts --list              # ดู peers online
+bun run send.ts --to <peer> <file>  # ส่งไฟล์
+```
+
+### รับไฟล์
+
+```bash
+bun run receiver.ts    # register เป็น receiver, ไฟล์ลง ./uploads/
+```
+
+## บทเรียนจากสนามจริง
+
+### 1. NAT คือศัตรูตัวจริง
+
+WebRTC ต้อง punch ผ่าน NAT ของทั้ง 2 ฝั่ง — ถ้าฝั่งไหนเป็น symmetric NAT หรือ block inbound UDP จะไม่ผ่าน
+
+ผลจริงจาก fleet:
+- chaiklang → m5: 978/978 files (100%) — NAT เปิดทั้งคู่
+- no1 → m5: 227→537/978 (intermittent) — double NAT
+- ViaLumen: signaling ผ่าน แต่ DataChannel ไม่เปิด — WSL2 block inbound UDP
+
+### 2. BATCH_SIZE=1 แก้ flaky NAT
+
+พี่นัทตัดสิน pure P2P ไม่พึ่ง VPN/relay — แล้ว fleet ค้นพบว่า BATCH_SIZE=1 (1 file ต่อ 1 connection) แก้ flaky NAT ได้ เพราะ symmetric NAT สุ่ม port ทุก connection — ส่งทีละไฟล์ = เสียแค่ 1 ไฟล์ต่อ 1 ครั้งที่ port ไม่ตรง
+
+### 3. ชื่อ peer ต้อง unique
+
+เจอจริง: มี `natz-smoke` ซ้ำ 2 ตัวบน worker — ไฟล์ไปลงผิดเครื่อง ส่งสำเร็จแต่ผิดคน PhD honest correction ทันที แล้ว rename เป็นชื่อไม่ซ้ำ
+
+### 4. TURN ที่ไปไม่ถึง อันตรายกว่าไม่มี TURN
+
+ทดสอบ v5 กับ openrelay TURN server — werift ค้างตอน ICE gathering เพราะ TURN unreachable ทำให้แม้แต่ same-host ที่เคยผ่านก็พัง ถอด TURN ออก = กลับมาทำงาน
+
+### 5. verify ทุกชั้น
+
+TCP connect สำเร็จ ไม่ได้แปลว่า protocol handshake สำเร็จ ISP transparent proxy ทำให้ `/dev/tcp` ดูเหมือนเปิด แต่ TURN server จริงไม่ถึง
+
+## ต่อยอด: Group Chat
+
+DataChannel เดียวกันที่ส่ง binary file chunks ก็ส่ง JSON chat messages ได้ — เปลี่ยนจาก file drop เป็น group chat:
+
+- Signaling server มีอยู่แล้ว (live, 200 OK)
+- WebRTC DataChannel พิสูจน์แล้วว่าทำงาน
+- เพิ่ม topic/room concept + wallet signature (port จาก ARRA-MQ EIP-712)
+- mesh topology สำหรับ group (ทุกคน connect ทุกคน) หรือ relay ผ่าน signaling
+
+## Proof
+
+```
+2026-06-20: ChaiKlang → dustboy-phd: ck-hello.md 149B sent (E2E verified)
+2026-06-20: Signaling 200 OK, 6+ peers online
+2026-06-11: chaiklang 978/978 files, no1 537/978 files (61GB total)
+```
+
+ทุก claim มีหลักฐานจากการทำจริง ไม่ใช่อ่านจาก docs

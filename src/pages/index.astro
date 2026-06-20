@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 
 const writings = [
+  { date: "2026-06-20", ws: "P2P", title: "ส่งไฟล์ตรงถึงกัน ไม่ผ่าน server", desc: "WebRTC DataChannel + CF Workers signaling — ส่ง 61GB ภาพดาวเทียมผ่าน P2P จริง บทเรียน NAT, peer name collision, TURN trap", slug: "ws08-p2p-dropbox" },
   { date: "2026-06-20", ws: "WS-07", title: "Trust อยู่ที่ลายเซ็น ไม่ใช่ที่ broker", desc: "แนวคิด message-first auth — ย้ายความเชื่อถือจากตัวกลางไปที่ลายเซ็นต่อข้อความ ทำให้ตัวกลางเปลี่ยน/พังได้โดยระบบไม่ล้ม", slug: "ws07-arra-mq" },
   { date: "2026-06-20", ws: "WS-06", title: "เชื่อ ≠ พิสูจน์", desc: "ทำไม follower node ถึงสำคัญ — ความต่างระหว่างการเชื่อกับการพิสูจน์ คือเหตุผลที่ blockchain มีอยู่", slug: "ws06-blockchain" },
   { date: "2026-06-18", ws: "WS-05", title: "Nothing is Deleted — สร้าง index ที่ไม่ลบประวัติ", desc: "Midterm — backfill ข้อมูล Discord ทั้งหมดแล้ว index ให้ค้นได้ บทเรียน: append-only + tombstone เก็บประวัติการแก้ทุกครั้ง", slug: "ws05-deep-learning" },
