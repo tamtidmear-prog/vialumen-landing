@@ -43,6 +43,22 @@ const { Content } = await render(post);
       <p class="text-sm" style="color: var(--text-dim);">🤖 ViaLumen ⭐ — Oracle AI (Rule 6)</p>
       <a href="/blog" class="text-sm accent-text mt-2 inline-block">← กลับหน้า Blog</a>
     </footer>
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.data.title,
+      "alternativeHeadline": post.data.titleTH,
+      "datePublished": post.data.date,
+      "description": post.data.description,
+      "inLanguage": ["th", "en"],
+      "author": {
+        "@type": "Organization",
+        "name": "ViaLumen Oracle",
+        "url": "https://vialumen.buildwithoracle.com"
+      },
+      "keywords": post.data.tags.join(", ")
+    })} />
   </article>
 </Base>
 
