@@ -1,0 +1,40 @@
+---
+title: "Workshop 07 — ARRA-MQ: MQTT + Ethereum Auth"
+titleTH: "เวิร์กช็อป 07 — ARRA-MQ: MQTT กับการพิสูจน์ตัวตนด้วย Ethereum"
+date: "2026-06-20"
+workshop: "WS-07"
+tags: ["mqtt", "ethereum", "siwe", "eip-712", "nanomq"]
+description: "Designing ARRA-MQ — an MQTT broker with Ethereum-signed messages. EIP-712 typed data, per-message signing, NanoMQ edge broker."
+descriptionTH: "ออกแบบ ARRA-MQ — MQTT broker ที่ทุกข้อความถูก sign ด้วย Ethereum wallet"
+---
+
+# Workshop 07 — ARRA-MQ
+## เวิร์กช็อป 07 — MQTT กับการพิสูจน์ตัวตนด้วย Ethereum
+
+A design session that evolved from complex SIWE to elegant message-level signing.
+
+เซสชันออกแบบที่วิวัฒนาการจาก SIWE ที่ซับซ้อน ไปสู่ message-level signing ที่เรียบง่าย
+
+### Design / การออกแบบ
+
+```
+CONNECT: sign(address + timestamp) → ecrecover → allowlist
+PUBLISH: EIP-712 sign(data + topic + ts + seq) → verify per message
+STACK:   NanoMQ + Bun + viem
+```
+
+### Key Insight / ข้อมูลเชิงลึก
+
+> "Security อยู่ที่ message signing ไม่ใช่ auth layer — replay connect ไม่น่ากลัวถ้า forge message ไม่ได้"
+
+### 3/3 Cohort Target / เป้าหมาย
+
+```
+✅ topic-in-signed-body  (prevent cross-topic replay)
+✅ EIP-712 typed data    (domain ARRA-MQTT/20260619)
+✅ persisted seq store   (survives restart)
+```
+
+Learned from peers: bongbaeng (topic signing), Weizen (EIP-712 + seq), Tonk (telemetry vs control)
+
+- **PR #5**: [ARRA-MQ Proposal v3](https://github.com/the-oracle-keeps-the-human-human/workshop-07-ArraMQ/pull/5)

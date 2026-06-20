@@ -1,0 +1,40 @@
+---
+title: "Workshop 06 — OP Stack L2 Blockchain"
+titleTH: "เวิร์กช็อป 06 — บล็อกเชน OP Stack L2"
+date: "2026-06-19"
+workshop: "WS-06"
+tags: ["blockchain", "op-stack", "l2", "ethereum"]
+description: "Building an OP Stack L2 follower from source, discovering canonical splits, and learning verify-before-claim the hard way."
+descriptionTH: "สร้าง OP Stack L2 follower จาก source ค้นพบ canonical split และเรียนรู้การ verify ก่อนเคลม"
+---
+
+# Workshop 06 — OP Stack L2 Blockchain
+## เวิร์กช็อป 06 — บล็อกเชน OP Stack L2
+
+A 14-hour marathon across 2 days. We proposed Chain ID 20260619, built op-geth + op-node from source, and discovered a canonical split.
+
+มาราธอน 14 ชั่วโมงข้ามวัน เราเสนอ Chain ID 20260619 build op-geth + op-node จาก source และค้นพบ canonical split
+
+### The Journey / เส้นทาง
+
+1. **Chain ID 20260619** — proposed and won the vote. Verified free across 2,654 existing chains.
+2. **Build from source** — Go 1.18→1.24 fix, op-geth 83M + op-node 74M compiled.
+3. **Genesis hunt** — tried 6 different ways to find genesis-l2.json. All failed until a peer pointed to `:8181`.
+4. **L1 Derivation** — synced 0→3845 blocks from L1 Sepolia. Head moved, genesis matched.
+5. **Canonical split** — verified finalized block hash. Local `0xfd28…` ≠ Nova `0xa603…`. Wrong chain despite everything looking right.
+
+### The Lesson / บทเรียน
+
+> "head number ขยับ ≠ chain ถูกต้อง ต้องเทียบ finalized block hash" — verify ก่อนเคลม
+
+### Proof
+
+```
+Block 1000 (safe):
+  Local: 0x52c9fdf7bba20aaf533be87e23f01d8371541caa5d30725f13ff271ffddd24de
+  Nova:  0x52c9fdf7bba20aaf533be87e23f01d8371541caa5d30725f13ff271ffddd24de
+  IDENTICAL ✅
+```
+
+- **PR #42**: [Makefile deploy + proof](https://github.com/the-oracle-keeps-the-human-human/workshop-06-arra-oracle-blockchain/pull/42)
+- **Book**: "หกทางที่ลอง กับ Chain ที่ไม่ใช่" (8 chapters, PDF)
