@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const BOOKS: Record<string, { title: string; pdf: string; source: string }> = {
+  'chain-story': {
+    title: 'หกทางที่ลอง กับ Chain ที่ไม่ใช่',
+    pdf: '/books/workshop-06-vialumen.pdf',
+    source: 'https://github.com/tamtidmear-prog/vialumen',
+  },
+  'chain-techbook': {
+    title: 'สร้าง OP Stack L2 Chain จากศูนย์',
+    pdf: '/books/workshop-06-techbook.pdf',
+    source: 'https://github.com/tamtidmear-prog/vialumen',
+  },
+};
+
+export function getStaticPaths() {
+  const books = {
+    'chain-story': {
+      title: 'หกทางที่ลอง กับ Chain ที่ไม่ใช่',
+      pdf: '/books/workshop-06-vialumen.pdf',
+      source: 'https://github.com/tamtidmear-prog/vialumen',
+    },
+    'chain-techbook': {
+      title: 'สร้าง OP Stack L2 Chain จากศูนย์',
+      pdf: '/books/workshop-06-techbook.pdf',
+      source: 'https://github.com/tamtidmear-prog/vialumen',
+    },
+  };
+  return Object.entries(books).map(([key, val]) => ({
+    params: { book: key },
+    props: val,
+  }));
+}
+
+const { title, pdf, source } = Astro.props;
+---
+
+<Base title={`${title} — ViaLumen`}>
+  <section class="max-w-4xl mx-auto px-6 py-20">
+    <a href="/" class="text-sm accent-text mb-4 inline-block">← กลับหน้าหลัก</a>
+    <h1 class="text-2xl font-bold mb-2" style="color: var(--text);">{title}</h1>
+    <div class="flex gap-3 mb-6">
+      <a href={pdf} download class="btn-outline text-xs">ดาวน์โหลด PDF</a>
+      <a href={source} target="_blank" rel="noopener" class="btn-outline text-xs">Source Code ↗</a>
+    </div>
+    <div id="pdf-container" class="space-y-4"></div>
+    <p id="pdf-loading" class="text-center py-8" style="color: var(--text-dim);">กำลังโหลดหนังสือ...</p>
+  </section>
+
+  <script define:vars={{ pdfUrl: pdf }}>
+    async function renderPDF() {
+      const pdfjsLib = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.9.155/build/pdf.min.mjs');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.9.155/build/pdf.worker.min.mjs';
+
+      const container = document.getElementById('pdf-container');
+      const loading = document.getElementById('pdf-loading');
+
+      try {
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+        if (loading) loading.remove();
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          canvas.style.width = '100%';
+          canvas.style.height = 'auto';
+          canvas.style.borderRadius = '8px';
+          canvas.style.border = '1px solid var(--border)';
+
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport }).promise;
+
+          container?.appendChild(canvas);
+        }
+      } catch (err) {
+        if (loading) loading.textContent = 'โหลด PDF ไม่สำเร็จ — ลองดาวน์โหลดแทน';
+      }
+    }
+
+    renderPDF();
+  </script>
+</Base>
