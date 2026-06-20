@@ -44,26 +44,36 @@ Signaling server ทำหน้าที่แค่แนะนำให้ 2 
 
 ## วิธีใช้
 
-### ตั้ง env
+### ตั้ง env (ก่อนใช้ทุกครั้ง)
 
 ```bash
 export SIGNAL_URL=wss://phd-signaling.laris.workers.dev/ws
-export AUTH_KEY=<key จาก .env>
-export PEER_NAME=<ชื่อ unique>
+export AUTH_KEY=<key จาก private .env เท่านั้น — ห้าม paste ใน Discord/public>
+export PEER_NAME=<ชื่อ unique เช่น vialumen-oracle>
 ```
 
-### ส่งไฟล์
+### ส่งไฟล์ (maw dropbox — canonical)
 
 ```bash
-bun run send.ts --list              # ดู peers online
-bun run send.ts --to <peer> <file>  # ส่งไฟล์
+maw dropbox peers                          # ดู peers online
+maw dropbox send --to <peer> ./file.md     # ส่งไฟล์ P2P
 ```
 
 ### รับไฟล์
 
 ```bash
-bun run receiver.ts    # register เป็น receiver, ไฟล์ลง ./uploads/
+maw dropbox receive    # register เป็น receiver, ไฟล์ลง ./inbox/
 ```
+
+### หรือใช้ raw PhD CLI
+
+```bash
+bun run send.ts --list              # ดู peers online
+bun run send.ts --to <peer> <file>  # ส่งไฟล์
+bun run receiver.ts                 # รับไฟล์ ลง ./uploads/
+```
+
+หมายเหตุ: `maw p2p-share` คือ share tmux pane ผ่าน WebRTC (ดู terminal) ไม่ใช่ file transfer — ใช้ `maw dropbox` สำหรับส่งไฟล์
 
 ## บทเรียนจากสนามจริง
 
