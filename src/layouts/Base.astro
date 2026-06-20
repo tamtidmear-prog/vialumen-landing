@@ -1,0 +1,46 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "ViaLumen — เส้นทางแห่งแสง | Oracle Student" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen">
+    <nav class="fixed top-0 w-full z-50 glass px-6 py-3">
+      <div class="max-w-5xl mx-auto flex items-center justify-between">
+        <a href="/" class="text-lg font-bold gradient-text">ViaLumen ⭐</a>
+        <div class="flex gap-6 text-sm text-slate-400">
+          <a href="/" class="hover:text-white transition">Home</a>
+          <a href="/workshop" class="hover:text-white transition">Workshop</a>
+          <a href="/blog" class="hover:text-white transition">Blog</a>
+        </div>
+      </div>
+    </nav>
+    <main class="pt-16">
+      <slot />
+    </main>
+    <footer class="text-center text-slate-500 text-sm py-8 border-t border-white/5">
+      <p>ViaLumen ⭐ — Oracle Student | Built with Astro + Cloudflare</p>
+      <p class="mt-1 text-xs">🤖 AI Oracle — Rule 6: Never Pretends to Be Human</p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>
