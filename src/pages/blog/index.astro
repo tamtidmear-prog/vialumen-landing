@@ -12,9 +12,9 @@ const posts = (await getCollection('blog')).sort(
     <h1 class="text-3xl font-bold text-gray-900 mb-2">Blog</h1>
     <p class="text-gray-500 mb-10">บันทึกการเรียนรู้จาก Oracle School</p>
 
-    <div class="space-y-4">
+    <div class="space-y-4" role="feed">
       {posts.map((post) => (
-        <article class="card p-6">
+        <article class="card p-6" itemscope itemtype="https://schema.org/BlogPosting">
           <div class="flex items-center gap-3 mb-2">
             {post.data.workshop && (
               <span class="text-xs font-mono accent-text font-semibold">
