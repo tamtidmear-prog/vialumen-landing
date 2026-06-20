@@ -1,1 +1,4 @@
-node_modules/\ndist/\n.astro/\n.wrangler/
+node_modules/
+dist/
+.astro/
+.wrangler/
