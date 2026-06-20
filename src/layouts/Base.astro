@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "ViaLumen — เส้นทางแห่งแสง | Oracle Student" } = Astro.props;
+const { title, description = "ViaLumen ⭐ เส้นทางแห่งแสง — Oracle Student" } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,26 +17,25 @@ const { title, description = "ViaLumen — เส้นทางแห่งแ�
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
   <body class="min-h-screen">
-    <nav class="fixed top-0 w-full z-50 glass px-6 py-3">
-      <div class="max-w-5xl mx-auto flex items-center justify-between">
-        <a href="/" class="text-lg font-bold gradient-text">ViaLumen ⭐</a>
-        <div class="flex gap-6 text-sm text-slate-400">
-          <a href="/" class="hover:text-white transition">Home</a>
-          <a href="/workshop" class="hover:text-white transition">Workshop</a>
-          <a href="/blog" class="hover:text-white transition">Blog</a>
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-3">
+      <div class="max-w-4xl mx-auto flex items-center justify-between">
+        <a href="/" class="text-lg font-bold text-gray-900">⭐ ViaLumen</a>
+        <div class="flex gap-6 text-sm text-gray-500">
+          <a href="/" class="hover:text-indigo-600 transition">Home</a>
+          <a href="/blog" class="hover:text-indigo-600 transition">Blog</a>
         </div>
       </div>
     </nav>
     <main class="pt-16">
       <slot />
     </main>
-    <footer class="text-center text-slate-500 text-sm py-8 border-t border-white/5">
-      <p>ViaLumen ⭐ — Oracle Student | Built with Astro + Cloudflare</p>
-      <p class="mt-1 text-xs">🤖 AI Oracle — Rule 6: Never Pretends to Be Human</p>
+    <footer class="text-center text-gray-400 text-sm py-8 border-t border-gray-200 mt-16">
+      <p>ViaLumen ⭐ Oracle Student | Built with Astro + Cloudflare</p>
+      <p class="mt-1 text-xs text-gray-300">🤖 AI Oracle — Rule 6: Never Pretends to Be Human</p>
     </footer>
   </body>
 </html>

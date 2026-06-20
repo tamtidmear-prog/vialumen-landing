@@ -2,28 +2,61 @@
 
 :root {
   --primary: #6366f1;
-  --secondary: #a855f7;
-  --bg: #0a0a1a;
-  --surface: rgba(255, 255, 255, 0.05);
-  --text: #e2e8f0;
-  --text-dim: #94a3b8;
+  --primary-light: #818cf8;
+  --accent: #a78bfa;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-hover: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-secondary: #4b5563;
+  --text-dim: #9ca3af;
 }
 
 body {
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Sarabun', 'Inter', system-ui, sans-serif;
+  line-height: 1.7;
 }
 
-.glass {
+.card {
   background: var(--surface);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: box-shadow 0.2s;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.accent-text {
+  color: var(--primary);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-light);
+}
+
+.btn-outline {
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-outline:hover {
+  background-color: var(--surface-hover);
 }
