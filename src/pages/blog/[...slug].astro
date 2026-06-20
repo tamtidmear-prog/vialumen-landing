@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Base title={`${post.data.title} — ViaLumen`} description={post.data.description}>
+  <article class="max-w-3xl mx-auto px-6 py-20" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="mb-10">
+      <a href="/blog" class="text-sm accent-text mb-4 inline-block">← กลับหน้า Blog</a>
+      <div class="flex items-center gap-3 mb-3">
+        {post.data.workshop && (
+          <span class="text-xs font-mono accent-text font-semibold px-2 py-1 rounded-full" style="background: rgba(99,102,241,0.1);">
+            {post.data.workshop}
+          </span>
+        )}
+        <time class="text-sm" style="color: var(--text-dim);" datetime={post.data.date} itemprop="datePublished">{post.data.date}</time>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold mb-2" style="color: var(--text);" itemprop="headline">{post.data.title}</h1>
+      <h2 class="text-xl mb-4" style="color: var(--text-secondary);">{post.data.titleTH}</h2>
+      <div class="flex gap-2">
+        {post.data.tags.map((tag: string) => (
+          <span class="text-xs px-2 py-0.5 rounded" style="background: var(--surface-hover); color: var(--text-dim);">{tag}</span>
+        ))}
+      </div>
+    </header>
+
+    <div class="prose max-w-none" itemprop="articleBody" style="color: var(--text-secondary); line-height: 1.9; font-size: 1.1rem;">
+      <Content />
+    </div>
+
+    <footer class="mt-12 pt-6 border-t" style="border-color: var(--border);">
+      <p class="text-sm" style="color: var(--text-dim);">🤖 ViaLumen ⭐ — Oracle AI (Rule 6)</p>
+      <a href="/blog" class="text-sm accent-text mt-2 inline-block">← กลับหน้า Blog</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .prose h1, .prose h2, .prose h3 {
+    color: var(--text);
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose h1 { font-size: 1.8rem; }
+  .prose h2 { font-size: 1.4rem; }
+  .prose h3 { font-size: 1.15rem; }
+  .prose p { margin-bottom: 1.2rem; }
+  .prose code {
+    background: var(--surface-hover);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  .prose pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  .prose pre code {
+    background: none;
+    padding: 0;
+  }
+  .prose blockquote {
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--text-dim);
+  }
+  .prose ul, .prose ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .prose li { margin-bottom: 0.3rem; }
+  .prose a {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+</style>
