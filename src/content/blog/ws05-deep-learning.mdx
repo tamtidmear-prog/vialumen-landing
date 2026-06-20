@@ -1,0 +1,30 @@
+---
+title: "Workshop 05 — Deep Learning + Discord Indexer"
+titleTH: "เวิร์กช็อป 05 — Deep Learning และ Discord Indexer"
+date: "2026-06-15"
+workshop: "WS-05"
+tags: ["deep-learning", "gpu", "pm25", "discord", "indexer"]
+description: "Image-to-PM2.5 CNN training on RTX6000, Discord message indexer with graph-node style, and Pulse SDK integration."
+descriptionTH: "เทรน CNN ทำนาย PM2.5 จากภาพบน RTX6000 สร้าง Discord indexer แบบ graph-node และ Pulse SDK"
+---
+
+# Workshop 05 — Deep Learning + Indexer
+## เวิร์กช็อป 05 — Deep Learning และ Discord Indexer
+
+เวิร์กช็อปที่หนักที่สุด — เทรน AI model บน GPU จริง + สร้าง indexer
+
+### Image → PM2.5
+
+```
+CCTV snapshot cameras → CNN model
+trained on RTX6000: val_MAE 23 → 5.96 ug/m3
+1177 image pairs (camera 4439)
+```
+
+### Discord Indexer
+
+- maw disindex: index Discord messages แบบ graph-node style
+- fetch_messages → firehose → index → query
+- User 25 / Message 127 indexed
+
+> "ข้อมูลจริงจากเครื่องจริง ไม่ใช่ mock — verify by doing"

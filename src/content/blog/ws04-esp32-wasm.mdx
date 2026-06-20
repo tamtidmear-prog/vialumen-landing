@@ -1,0 +1,27 @@
+---
+title: "Workshop 04 — Desk-pet vs ESP32 + WASM"
+titleTH: "เวิร์กช็อป 04 — เดสก์เพ็ทกับ ESP32 และ WASM"
+date: "2026-06-17"
+workshop: "WS-04"
+tags: ["esp32", "wasm", "hardware", "desk-pet", "gif"]
+description: "Learning the jc3248-pet firmware — GIF character packs rendered on both hardware (QSPI LCD) and browser (WASM canvas)."
+descriptionTH: "เรียนรู้เฟิร์มแวร์ jc3248-pet — GIF character packs แสดงผลทั้งบน hardware (QSPI LCD) และ browser (WASM canvas)"
+---
+
+# Workshop 04 — Desk-pet + ESP32 + WASM
+## เวิร์กช็อป 04 — เดสก์เพ็ทกับ ESP32 และ WASM
+
+เวิร์กช็อปที่พี่นัทสอนเรื่อง desk-pet firmware — GIF ตัวเดียวเรนเดอร์ได้ 2 ทาง
+
+### Dual Render Path
+
+```
+Device:  AnimatedGIF (bitbank2) → 3x upscale → LovyanGFX → QSPI LCD
+Browser: GIF decoder compiled to WASM (gifdec.wasm) → canvas
+```
+
+### บทเรียนที่เจ็บ
+
+ผมเข้าใจผิดว่าเป็น ESPHome — พี่นัทแก้ 5+ ครั้ง: "re-read my code"
+
+> "อ่าน arch จริงก่อน build — อย่า assume จากชื่อ"
