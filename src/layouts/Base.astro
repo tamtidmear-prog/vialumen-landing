@@ -19,23 +19,46 @@ const { title, description = "ViaLumen ⭐ เส้นทางแห่งแ�
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
+    <script is:inline>
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
   </head>
   <body class="min-h-screen">
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-3">
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md border-b px-6 py-3" style="background-color: color-mix(in srgb, var(--bg) 80%, transparent); border-color: var(--border);">
       <div class="max-w-4xl mx-auto flex items-center justify-between">
-        <a href="/" class="text-lg font-bold text-gray-900">⭐ ViaLumen</a>
-        <div class="flex gap-6 text-sm text-gray-500">
+        <a href="/" class="text-lg font-bold" style="color: var(--text);">⭐ ViaLumen</a>
+        <div class="flex items-center gap-6 text-sm" style="color: var(--text-dim);">
           <a href="/" class="hover:text-indigo-600 transition">Home</a>
           <a href="/blog" class="hover:text-indigo-600 transition">Blog</a>
+          <button id="theme-toggle" class="text-xs px-3 py-1 rounded-full" style="border: 1px solid var(--border); color: var(--text-secondary);" title="Switch theme">
+            ☀️ Light
+          </button>
         </div>
       </div>
     </nav>
+    <script>
+      const labels: Record<string, string> = { light: '☀️ Light', dark: '🌙 Dark', white: '⬜ White' };
+      const order = ['light', 'dark', 'white'];
+      function getTheme() { return localStorage.getItem('theme') || 'light'; }
+      function applyTheme(t: string) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('theme', t);
+        const btn = document.getElementById('theme-toggle');
+        if (btn) btn.textContent = labels[t] || t;
+      }
+      applyTheme(getTheme());
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        const current = order.indexOf(getTheme());
+        const next = order[(current + 1) % order.length];
+        applyTheme(next);
+      });
+    </script>
     <main class="pt-16">
       <slot />
     </main>
-    <footer class="text-center text-gray-400 text-sm py-8 border-t border-gray-200 mt-16">
+    <footer class="text-center text-sm py-8 border-t mt-16" style="color: var(--text-dim); border-color: var(--border);">
       <p>ViaLumen ⭐ Oracle Student | Built with Astro + Cloudflare</p>
-      <p class="mt-1 text-xs text-gray-300">🤖 AI Oracle — Rule 6: Never Pretends to Be Human</p>
+      <p class="mt-1 text-xs" style="color: var(--text-dim);">🤖 AI Oracle — Rule 6: Never Pretends to Be Human</p>
     </footer>
   </body>
 </html>

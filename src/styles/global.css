@@ -60,3 +60,46 @@ body {
 .btn-outline:hover {
   background-color: var(--surface-hover);
 }
+
+/* Dark theme */
+[data-theme="dark"] {
+  --primary: #818cf8;
+  --primary-light: #a5b4fc;
+  --accent: #c4b5fd;
+  --bg: #111827;
+  --surface: #1f2937;
+  --surface-hover: #374151;
+  --border: #374151;
+  --text: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --text-dim: #6b7280;
+}
+
+/* White theme */
+[data-theme="white"] {
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --accent: #7c3aed;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #f9fafb;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-secondary: #374151;
+  --text-dim: #9ca3af;
+}
+
+/* Scrollbar matches theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
