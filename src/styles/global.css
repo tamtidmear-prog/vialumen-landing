@@ -25,11 +25,19 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+  border-color: var(--primary-light);
 }
 
 .accent-text {
@@ -47,6 +55,8 @@ body {
 
 .btn-primary:hover {
   background-color: var(--primary-light);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
